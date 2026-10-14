@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import LicensedAdminNote from '../lcca/LicensedAdminNote';
 import { tracks } from '../tracks/config';
+import { lcpaaDomains as domains } from '@/mocks/lcpaaContent';
 
 const track = tracks.lcpaa;
 
@@ -32,13 +33,13 @@ export default function LCPAAPage() {
             Exam Prep
           </h1>
           <p className="text-[#8B8680] text-sm md:text-base leading-relaxed max-w-xl mb-8">
-            Free practice exams and study games built from Chapter 749 of the Texas Minimum Standards for Child-Placing Agencies (revised August 2026) — foster home screenings, placement, service planning, child rights, discipline, medical care and more.
+            A free study guide, practice exams and study games built from Chapter 749 of the Texas Minimum Standards for Child-Placing Agencies (revised August 2026) — foster home screenings, placement, service planning, child rights, discipline, medical care and more.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl">
             {[
               { value: `${track.exams.length}`, label: 'Practice Exams' },
               { value: `${totalQuestions}`, label: 'Questions' },
-              { value: '4', label: 'Games' },
+              { value: `${domains.length}`, label: 'Study Domains' },
               { value: 'Ch. 749', label: 'Standards' },
             ].map(s => (
               <div key={s.label} className="bg-white/5 rounded-2xl p-5">
@@ -72,7 +73,26 @@ export default function LCPAAPage() {
           </span>
         </Link>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="bg-[#0A0A0A]/4 border border-[#C9A84C]/20 rounded-3xl p-8 flex flex-col justify-between gap-6">
+            <div className="flex items-start gap-5">
+              <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-[#C9A84C]/15 border border-[#C9A84C]/20 shrink-0">
+                <i className="ri-book-open-line text-[#C9A84C] text-2xl"></i>
+              </div>
+              <div>
+                <p className="text-[#C9A84C] text-[10px] tracking-[0.3em] uppercase mb-1">Learn the Rules</p>
+                <h3 className="text-[#0A0A0A] text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Study Guide</h3>
+                <p className="text-[#5C5752] text-sm mt-1">{domains.length} domains · study material, real-world scenarios and a quiz for each</p>
+              </div>
+            </div>
+            <Link
+              to={`${track.basePath}/study`}
+              className="whitespace-nowrap inline-flex items-center justify-center gap-3 bg-[#0A0A0A] text-[#F5F1E8] text-xs tracking-[0.2em] uppercase px-8 py-4 rounded-full hover:bg-[#C9A84C] hover:text-[#0A0A0A] transition-all duration-300 cursor-pointer font-semibold"
+            >
+              Open the Study Guide
+              <i className="ri-arrow-right-line"></i>
+            </Link>
+          </div>
           <div className="bg-[#0A0A0A]/4 border border-[#C9A84C]/20 rounded-3xl p-8 flex flex-col justify-between gap-6">
             <div className="flex items-start gap-5">
               <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-[#C9A84C]/15 border border-[#C9A84C]/20 shrink-0">

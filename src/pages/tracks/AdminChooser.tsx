@@ -61,7 +61,7 @@ export default function AdminChooser() {
               <p className="text-[#0A0A0A] text-lg font-light mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{track.name}</p>
               <p className="text-[#5C5752] text-sm leading-relaxed mb-6 flex-1">{blurb}</p>
               <p className="text-[#8B8680] text-xs mb-6">
-                {track.exams.length} practice exams · 4 games · {track.chapterLabel}
+                Study guide · {track.exams.length} practice exams · 4 games · {track.chapterLabel}
               </p>
               <span className="whitespace-nowrap w-full text-center text-xs tracking-[0.15em] uppercase py-3.5 rounded-full bg-[#0A0A0A] text-[#F5F1E8] group-hover:bg-[#C9A84C] group-hover:text-[#0A0A0A] transition-all duration-300 font-medium">
                 Start {track.short} Prep

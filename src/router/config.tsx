@@ -8,6 +8,7 @@ import LCCAPage from "../pages/lcca/page";
 import PracticeExamsPage from "../pages/lcca/PracticeExams";
 import LCPAAPage from "../pages/lcpaa/page";
 import LCPAAPracticeExamsPage from "../pages/lcpaa/PracticeExams";
+import LCPAAStudyPage from "../pages/lcpaa/Study";
 import AdminChooser from "../pages/tracks/AdminChooser";
 import { TrackGame, TrackGamesHub } from "../pages/tracks/TrackPages";
 
@@ -35,6 +36,10 @@ const routes: RouteObject[] = [
   {
     path: "/lcpaa",
     element: <LCPAAPage />,
+  },
+  {
+    path: "/lcpaa/study",
+    element: <LCPAAStudyPage />,
   },
   {
     path: "/lcpaa/practice-exams",

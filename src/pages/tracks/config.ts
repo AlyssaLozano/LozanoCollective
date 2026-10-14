@@ -1,6 +1,8 @@
 import { lccaPracticeExams, type PracticeExam } from '@/mocks/lccaExams';
 import { lccaDomains } from '@/mocks/lccaContent';
 import { lcpaaPracticeExams } from '@/mocks/lcpaaExams';
+import { lcpaaDomains } from '@/mocks/lcpaaContent';
+import type { StudyDomain } from '@/mocks/studyTypes';
 import { lccaGameData } from '@/mocks/lccaGames';
 import { lcpaaGameData } from '@/mocks/lcpaaGames';
 import type { GameData } from '@/mocks/gameTypes';
@@ -39,7 +41,7 @@ export type Track = {
 
 // Built from the same banks as the practice exams and domain quizzes so games
 // stay in sync whenever those are updated. Duplicate questions are dropped.
-function buildPool(exams: PracticeExam[], includeDomainQuizzes: boolean): GameQuestion[] {
+function buildPool(exams: PracticeExam[], domains: StudyDomain[]): GameQuestion[] {
   const seen = new Set<string>();
   const out: GameQuestion[] = [];
   const add = (q: GameQuestion, fallbackDomain: string) => {
@@ -49,9 +51,7 @@ function buildPool(exams: PracticeExam[], includeDomainQuizzes: boolean): GameQu
     out.push({ ...q, domain: q.domain || fallbackDomain });
   };
   exams.forEach(exam => exam.questions.forEach(q => add(q, 'General')));
-  if (includeDomainQuizzes) {
-    lccaDomains.forEach(d => d.quiz.forEach(q => add({ ...(q as GameQuestion) }, d.title)));
-  }
+  domains.forEach(d => d.quiz.forEach(q => add({ ...q, domain: d.title }, d.title)));
   return out;
 }
 
@@ -65,7 +65,7 @@ export const tracks: Record<TrackId, Track> = {
     role: 'GRO administrator',
     basePath: '/lcca',
     exams: lccaPracticeExams,
-    pool: buildPool(lccaPracticeExams, true),
+    pool: buildPool(lccaPracticeExams, lccaDomains),
     chapterRegex: /748|general residential|GRO\b/i,
     gameData: lccaGameData,
   },
@@ -78,7 +78,7 @@ export const tracks: Record<TrackId, Track> = {
     role: 'CPA administrator',
     basePath: '/lcpaa',
     exams: lcpaaPracticeExams,
-    pool: buildPool(lcpaaPracticeExams, false),
+    pool: buildPool(lcpaaPracticeExams, lcpaaDomains),
     chapterRegex: /749|child-placing|foster/i,
     gameData: lcpaaGameData,
   },
