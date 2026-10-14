@@ -1,17 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { lccaPracticeExams } from '@/mocks/lccaExams';
-import { lccaDomains } from '@/mocks/lccaContent';
-import LicensedAdminNote from './LicensedAdminNote';
-
-type GameQuestion = {
-  id: string;
-  domain: string;
-  question: string;
-  options: string[];
-  correct: number;
-  explanation: string;
-};
+import LicensedAdminNote from '../lcca/LicensedAdminNote';
+import { shuffle, readBest, writeBest, bestKey, type GameQuestion, type Track } from '../tracks/config';
 
 type Phase = 'menu' | 'playing' | 'over';
 type Mode = 'all' | 'ch748' | 'scenario';
@@ -19,35 +9,6 @@ type Mode = 'all' | 'ch748' | 'scenario';
 const START_LIVES = 3;
 const SECONDS_PER_QUESTION = 25;
 const ROUND_LENGTH = 15;
-const BEST_KEY = 'lcca-game-best';
-
-// ── QUESTION POOL ────────────────────────────────────────────────────────────
-// Built from the same banks as the practice exams and domain quizzes so the
-// game stays in sync whenever those are updated. Duplicates are dropped.
-function buildPool(): GameQuestion[] {
-  const seen = new Set<string>();
-  const out: GameQuestion[] = [];
-  const add = (q: GameQuestion & { domain?: string }, fallbackDomain: string) => {
-    const key = q.question.trim().toLowerCase();
-    if (seen.has(key) || q.options.length < 2) return;
-    seen.add(key);
-    out.push({ ...q, domain: q.domain || fallbackDomain });
-  };
-  lccaPracticeExams.forEach(exam => exam.questions.forEach(q => add(q, 'General')));
-  lccaDomains.forEach(d =>
-    d.quiz.forEach(q => add({ ...(q as GameQuestion) }, d.title))
-  );
-  return out;
-}
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
 
 // Shuffle answer order so players learn the rule, not the letter.
 function shuffleOptions(q: GameQuestion): GameQuestion {
@@ -63,26 +24,6 @@ function isScenario(q: GameQuestion) {
   return q.question.length > 140 || (q.question.length > 90 && /^(you are|a |an |during|your |at |when)/i.test(q.question));
 }
 
-function is748(q: GameQuestion) {
-  return /748|general residential|GRO\b/i.test(`${q.domain} ${q.question} ${q.explanation}`);
-}
-
-function readBest(): number {
-  try {
-    return parseInt(localStorage.getItem(BEST_KEY) || '0', 10) || 0;
-  } catch {
-    return 0;
-  }
-}
-
-function writeBest(n: number) {
-  try {
-    localStorage.setItem(BEST_KEY, String(n));
-  } catch {
-    /* storage unavailable — game still works */
-  }
-}
-
 function rankFor(pct: number) {
   if (pct >= 90) return { title: 'Licensed-Ready', icon: 'ri-trophy-line' };
   if (pct >= 75) return { title: 'Compliance Pro', icon: 'ri-medal-line' };
@@ -91,8 +32,9 @@ function rankFor(pct: number) {
 }
 
 // ── PAGE ─────────────────────────────────────────────────────────────────────
-export default function LCCAGamePage() {
-  const pool = useMemo(buildPool, []);
+export default function SprintGame({ track }: { track: Track }) {
+  const pool = track.pool;
+  const BEST_KEY = bestKey(track.id, 'sprint');
   const [phase, setPhase] = useState<Phase>('menu');
   const [mode, setMode] = useState<Mode>('all');
   const [queue, setQueue] = useState<GameQuestion[]>([]);
@@ -107,7 +49,7 @@ export default function LCCAGamePage() {
   const [fiftyUsed, setFiftyUsed] = useState(false);
   const [hidden, setHidden] = useState<number[]>([]);
   const [missed, setMissed] = useState<GameQuestion[]>([]);
-  const [best, setBest] = useState(readBest);
+  const [best, setBest] = useState(() => readBest(BEST_KEY));
   const [newBest, setNewBest] = useState(false);
   const [gain, setGain] = useState<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -117,11 +59,11 @@ export default function LCCAGamePage() {
 
   const poolFor = useCallback(
     (m: Mode) => {
-      if (m === 'ch748') return pool.filter(is748);
+      if (m === 'ch748') return pool.filter(q => track.chapterRegex.test(`${q.domain} ${q.question} ${q.explanation}`));
       if (m === 'scenario') return pool.filter(isScenario);
       return pool;
     },
-    [pool]
+    [pool, track]
   );
 
   const counts = useMemo(
@@ -141,8 +83,8 @@ export default function LCCAGamePage() {
   const finish = useCallback(
     (finalScore: number) => {
       stopTimer();
-      if (finalScore > readBest()) {
-        writeBest(finalScore);
+      if (finalScore > readBest(BEST_KEY)) {
+        writeBest(BEST_KEY, finalScore);
         setBest(finalScore);
         setNewBest(finalScore > 0);
       }
@@ -238,7 +180,7 @@ export default function LCCAGamePage() {
   if (phase === 'menu') {
     const modes: { id: Mode; title: string; blurb: string; icon: string }[] = [
       { id: 'all', title: 'Full Mix', blurb: 'Questions from every domain and every practice exam.', icon: 'ri-shuffle-line' },
-      { id: 'ch748', title: 'Chapter 748 Blitz', blurb: 'General Residential Operations rules, timelines and ratios only.', icon: 'ri-building-2-line' },
+      { id: 'ch748', title: `${track.chapterLabel} Blitz`, blurb: `${track.governs} rules, timelines and limits only.`, icon: 'ri-building-2-line' },
       { id: 'scenario', title: 'Scenario Showdown', blurb: 'Longer, real-world situations. You are the administrator.', icon: 'ri-discuss-line' },
     ];
     return (
@@ -246,17 +188,17 @@ export default function LCCAGamePage() {
         <div className="bg-[#0A0A0A] px-6 md:px-12 lg:px-20 py-16 md:py-24">
           <div className="max-w-screen-xl mx-auto">
             <Link
-              to="/lcca"
+              to={track.basePath + "/games"}
               className="whitespace-nowrap inline-flex items-center gap-2 text-[#8B8680] hover:text-[#C9A84C] text-xs tracking-[0.2em] uppercase mb-10 transition-all cursor-pointer"
             >
               <i className="ri-arrow-left-line"></i>
-              Back to Study Guide
+              All Games
             </Link>
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
               <div>
                 <div className="inline-flex items-center gap-3 bg-[#C9A84C]/10 border border-[#C9A84C]/30 rounded-full px-5 py-2 mb-6">
                   <i className="ri-gamepad-line text-[#C9A84C] text-sm"></i>
-                  <span className="text-[#C9A84C] text-xs tracking-[0.2em] uppercase font-medium">LCCA Exam Prep</span>
+                  <span className="text-[#C9A84C] text-xs tracking-[0.2em] uppercase font-medium">{track.short} Exam Prep</span>
                 </div>
                 <h1 className="text-[#F5F1E8] text-4xl md:text-6xl lg:text-7xl font-light leading-[1.1]" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
                   Compliance
@@ -383,7 +325,7 @@ export default function LCCAGamePage() {
                 Change Round
               </button>
               <Link
-                to="/lcca/practice-exams"
+                to={track.basePath + "/practice-exams"}
                 className="whitespace-nowrap text-xs tracking-[0.2em] uppercase px-8 py-4 rounded-full border border-white/30 text-white hover:bg-white/10 transition-all cursor-pointer"
               >
                 Practice Exams

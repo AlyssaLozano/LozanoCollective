@@ -294,6 +294,27 @@ export default function LCCAPage() {
         {/* Practice Exams CTA */}
         <div className="bg-[#F5F1E8] px-6 md:px-12 lg:px-20 py-10">
           <div className="max-w-screen-xl mx-auto">
+            {/* Admin game — recommended first step */}
+            <Link
+              to="/lcca/games/admin-shift"
+              className="group mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-[#0A0A0A] rounded-3xl p-8 border border-[#C9A84C]/40 hover:border-[#C9A84C] transition-all"
+            >
+              <div className="flex items-center gap-5">
+                <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-[#C9A84C]/15 border border-[#C9A84C]/30 shrink-0">
+                  <i className="ri-gamepad-line text-[#C9A84C] text-2xl"></i>
+                </div>
+                <div>
+                  <p className="text-[#C9A84C] text-[10px] tracking-[0.3em] uppercase mb-1">Start Here</p>
+                  <h3 className="text-[#F5F1E8] text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Play the Admin Game before you take the practice test</h3>
+                  <p className="text-[#8B8680] text-sm mt-1">Admin Shift: run a day as the GRO administrator and learn Chapter 748 by making the calls.</p>
+                </div>
+              </div>
+              <span className="whitespace-nowrap inline-flex items-center gap-3 bg-[#C9A84C] text-[#0A0A0A] text-xs tracking-[0.2em] uppercase px-8 py-4 rounded-full group-hover:bg-[#F5F1E8] transition-all font-semibold shrink-0">
+                Play Admin Shift
+                <i className="ri-arrow-right-line"></i>
+              </span>
+            </Link>
+
             <div className="bg-[#0A0A0A]/4 border border-[#C9A84C]/20 rounded-3xl p-8 flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex items-center gap-5">
                 <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-[#C9A84C]/15 border border-[#C9A84C]/20 shrink-0">
@@ -321,16 +342,16 @@ export default function LCCAPage() {
                   <i className="ri-gamepad-line text-[#C9A84C] text-2xl"></i>
                 </div>
                 <div>
-                  <p className="text-[#C9A84C] text-[10px] tracking-[0.3em] uppercase mb-1">New · Study Game</p>
-                  <h3 className="text-[#F5F1E8] text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Compliance Sprint</h3>
-                  <p className="text-[#8B8680] text-sm mt-1">Beat the clock, build streaks, keep your lives — a fast way to drill the rules.</p>
+                  <p className="text-[#C9A84C] text-[10px] tracking-[0.3em] uppercase mb-1">New · Study Games</p>
+                  <h3 className="text-[#F5F1E8] text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Study Games</h3>
+                  <p className="text-[#8B8680] text-sm mt-1">Admin Shift, Deadline Dash, Citation Court and Compliance Sprint — four ways to drill the rules.</p>
                 </div>
               </div>
               <Link
-                to="/lcca/game"
+                to="/lcca/games"
                 className="whitespace-nowrap inline-flex items-center gap-3 bg-[#C9A84C] text-[#0A0A0A] text-xs tracking-[0.2em] uppercase px-8 py-4 rounded-full hover:bg-[#F5F1E8] transition-all duration-300 cursor-pointer font-semibold shrink-0"
               >
-                Play the Game
+                Open the Games
                 <i className="ri-arrow-right-line"></i>
               </Link>
             </div>
@@ -421,6 +442,10 @@ export default function LCCAPage() {
           <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-[#8B8680] text-xs">Free resource for foster families and child care professionals in Texas.</p>
             <div className="flex items-center gap-6">
+              <Link to="/admin" className="whitespace-nowrap inline-flex items-center gap-2 text-[#C9A84C] text-xs tracking-[0.15em] uppercase hover:underline cursor-pointer transition-all">
+                <i className="ri-swap-line text-sm"></i>
+                Switch to LCPAA
+              </Link>
               <Link to="/" className="whitespace-nowrap inline-flex items-center gap-2 text-[#C9A84C] text-xs tracking-[0.15em] uppercase hover:underline cursor-pointer transition-all">
                 <i className="ri-user-heart-line text-sm"></i>
                 Who made this?

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { lccaPracticeExams, PracticeExam } from '@/mocks/lccaExams';
+import type { PracticeExam } from '@/mocks/lccaExams';
+import { tracks, type Track } from '../tracks/config';
 import LicensedAdminNote from './LicensedAdminNote';
 
 type AnswerMap = Record<string, number>;
@@ -10,9 +11,11 @@ type ViewMode = 'list' | 'exam' | 'results';
 function ExamView({
   exam,
   onBack,
+  track,
 }: {
   exam: PracticeExam;
   onBack: () => void;
+  track: Track;
 }) {
   const [answers, setAnswers] = useState<AnswerMap>({});
   const [revealed, setRevealed] = useState<RevealMap>({});
@@ -148,7 +151,7 @@ function ExamView({
                     <label className="text-[#0A0A0A] text-xs font-medium block mb-2">Exam Taken</label>
                     <select name="exam_taken" className="w-full px-4 py-3 rounded-xl border border-[#0A0A0A]/10 bg-[#F5F1E8]/40 text-sm text-[#0A0A0A] focus:outline-none focus:border-[#C9A84C]/50">
                       <option value="">Select exam...</option>
-                      {lccaPracticeExams.map(e => (
+                      {track.exams.map(e => (
                         <option key={e.id} value={`Exam ${e.number} — ${e.title}`}>Exam {e.number} — {e.title}</option>
                       ))}
                     </select>
@@ -183,7 +186,7 @@ function ExamView({
                 </div>
 
                 <div className="mb-6">
-                  <label className="text-[#0A0A0A] text-xs font-medium block mb-2">Would you recommend these exams to someone preparing for the LCCA test?</label>
+                  <label className="text-[#0A0A0A] text-xs font-medium block mb-2">Would you recommend these exams to someone preparing for the {track.short} test?</label>
                   <div className="flex gap-4">
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input type="radio" name="recommend" value="Yes" className="accent-[#C9A84C]" />
@@ -307,15 +310,15 @@ function ExamView({
   );
 }
 
-export default function PracticeExamsPage() {
+export default function PracticeExamsPage({ track = tracks.lcca }: { track?: Track }) {
   const [activeExam, setActiveExam] = useState<PracticeExam | null>(null);
   const [scores, setScores] = useState<Record<string, number>>({});
 
   if (activeExam) {
-    return <ExamView exam={activeExam} onBack={() => setActiveExam(null)} />;
+    return <ExamView exam={activeExam} onBack={() => setActiveExam(null)} track={track} />;
   }
 
-  const totalQuestions = lccaPracticeExams.reduce((a, e) => a + e.questions.length, 0);
+  const totalQuestions = track.exams.reduce((a, e) => a + e.questions.length, 0);
 
   const difficultyLabel = (n: number) => {
     if (n <= 2) return 'Foundational';
@@ -343,17 +346,17 @@ export default function PracticeExamsPage() {
       <div className="bg-[#0A0A0A] px-6 md:px-12 lg:px-20 py-16 md:py-24">
         <div className="max-w-screen-xl mx-auto">
           <Link
-            to="/lcca"
+            to={track.basePath}
             className="whitespace-nowrap inline-flex items-center gap-2 text-[#8B8680] hover:text-[#C9A84C] text-xs tracking-[0.2em] uppercase mb-10 transition-all cursor-pointer"
           >
             <i className="ri-arrow-left-line"></i>
-            Back to Study Guide
+            Back to {track.short} Home
           </Link>
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
             <div>
               <div className="inline-flex items-center gap-3 bg-[#C9A84C]/10 border border-[#C9A84C]/30 rounded-full px-5 py-2 mb-6">
                 <i className="ri-file-list-3-line text-[#C9A84C] text-sm"></i>
-                <span className="text-[#C9A84C] text-xs tracking-[0.2em] uppercase font-medium">LCCA Exam Prep</span>
+                <span className="text-[#C9A84C] text-xs tracking-[0.2em] uppercase font-medium">{track.short} Exam Prep</span>
               </div>
               <h1 className="text-[#F5F1E8] text-4xl md:text-6xl lg:text-7xl font-light leading-[1.1]" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
                 Practice
@@ -363,20 +366,20 @@ export default function PracticeExamsPage() {
             </div>
             <div className="max-w-sm">
               <p className="text-[#8B8680] text-sm leading-relaxed mb-6">
-                {lccaPracticeExams.length} full-length practice exams, {totalQuestions} questions in all, updated for the September 2026 Minimum Standards (Chapters 748 and 749). Answer all questions, then submit to see your score and detailed explanations.
+                {track.exams.length} full-length practice exams, {totalQuestions} questions in all, {track.id === 'lcca' ? 'updated for the September 2026 Minimum Standards (Chapters 748 and 749)' : 'built from the Chapter 749 Minimum Standards for Child-Placing Agencies (revised August 2026)'}. Answer all questions, then submit to see your score and detailed explanations.
               </p>
               <Link
-                to="/lcca/game"
+                to={`${track.basePath}/games`}
                 className="whitespace-nowrap inline-flex items-center gap-2 text-[#C9A84C] text-xs tracking-[0.2em] uppercase mb-6 hover:underline cursor-pointer"
               >
                 <i className="ri-gamepad-line text-sm"></i>
-                Or play the Compliance Sprint game
+                Or visit the Games page
               </Link>
               <div className="grid grid-cols-3 gap-4">
                 {[
-                  { value: `${lccaPracticeExams.length}`, label: 'Exams' },
+                  { value: `${track.exams.length}`, label: 'Exams' },
                   { value: `${totalQuestions}`, label: 'Questions' },
-                  { value: '7', label: 'Domains' },
+                  { value: track.id === 'lcca' ? '7' : `${new Set(track.exams.flatMap(e => e.questions.map(q => q.domain))).size}`, label: track.id === 'lcca' ? 'Domains' : 'Topics' },
                 ].map(s => (
                   <div key={s.label} className="bg-white/5 rounded-2xl p-4 text-center">
                     <p className="text-[#F5F1E8] text-2xl font-light mb-1" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{s.value}</p>
@@ -391,9 +394,29 @@ export default function PracticeExamsPage() {
 
       {/* Exam cards */}
       <div className="max-w-screen-xl mx-auto px-6 md:px-12 lg:px-20 py-16 md:py-24">
+        <Link
+          to={`${track.basePath}/games/admin-shift`}
+          className="group mb-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 bg-[#0A0A0A] rounded-3xl p-6 md:p-8 border border-[#C9A84C]/30 hover:border-[#C9A84C] transition-all"
+        >
+          <div className="flex items-center gap-5">
+            <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-[#C9A84C]/15 border border-[#C9A84C]/30 shrink-0">
+              <i className="ri-gamepad-line text-[#C9A84C] text-2xl"></i>
+            </div>
+            <div>
+              <p className="text-[#C9A84C] text-[10px] tracking-[0.3em] uppercase mb-1">Warm Up First</p>
+              <h3 className="text-[#F5F1E8] text-xl md:text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Play the Admin Game before you take a practice test</h3>
+              <p className="text-[#8B8680] text-sm mt-1">Admin Shift: run a day as the {track.role} and learn the rules by making the calls.</p>
+            </div>
+          </div>
+          <span className="whitespace-nowrap inline-flex items-center gap-3 bg-[#C9A84C] text-[#0A0A0A] text-xs tracking-[0.2em] uppercase px-8 py-4 rounded-full group-hover:bg-[#F5F1E8] transition-all font-semibold shrink-0">
+            Play Admin Shift
+            <i className="ri-arrow-right-line"></i>
+          </span>
+        </Link>
+
         <p className="text-[#C9A84C] text-[10px] tracking-[0.3em] uppercase mb-10">Select an Exam to Begin</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {lccaPracticeExams.map(exam => {
+          {track.exams.map(exam => {
             const score = scores[exam.id];
             return (
               <div key={exam.id} className="bg-white rounded-3xl border border-[#0A0A0A]/6 hover:border-[#C9A84C]/40 transition-all duration-300 overflow-hidden">
@@ -408,7 +431,7 @@ export default function PracticeExamsPage() {
                   </div>
                   <h3 className="text-[#0A0A0A] text-xl font-light leading-tight mb-3" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{exam.title}</h3>
                   <p className="text-[#5C5752] text-sm leading-relaxed mb-2">{exam.description}</p>
-                  <p className="text-[#8B8680] text-xs mb-6">{exam.questions.length} questions · All 7 domains · {exam.questions.length >= 40 ? '50 min' : '25 min'} recommended</p>
+                  <p className="text-[#8B8680] text-xs mb-6">{exam.questions.length} questions{track.id === 'lcca' ? ' · All 7 domains' : ''} · {exam.questions.length >= 40 ? '50 min' : exam.questions.length >= 30 ? '35 min' : '25 min'} recommended</p>
 
                   {score !== undefined && (
                     <div className="mb-5">
@@ -439,7 +462,7 @@ export default function PracticeExamsPage() {
           <p className="text-[#C9A84C] text-[10px] tracking-[0.3em] uppercase mb-6">Exam Tips</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: 'ri-time-line', title: 'Simulate Test Conditions', body: 'Try to complete each exam in one sitting without notes. The real LCCA exam is timed — practice building your pace.' },
+              { icon: 'ri-time-line', title: 'Simulate Test Conditions', body: 'Try to complete each exam in one sitting without notes. The real {track.short} exam is timed — practice building your pace.' },
               { icon: 'ri-book-open-line', title: 'Review Every Explanation', body: 'Even when you get a question right, read the explanation. Understanding the "why" is more valuable than memorizing answers.' },
               { icon: 'ri-repeat-line', title: 'Retake Until You Score 80%+', body: 'Aim for 80% or higher on each exam before test day. If you miss questions in a domain, go back to the study material for that domain.' },
             ].map(tip => (
@@ -462,9 +485,9 @@ export default function PracticeExamsPage() {
         <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-[#8B8680] text-xs">Free resource for foster families and child care professionals in Texas.</p>
           <div className="flex items-center gap-6">
-            <Link to="/lcca" className="whitespace-nowrap inline-flex items-center gap-2 text-[#C9A84C] text-xs tracking-[0.15em] uppercase hover:underline cursor-pointer transition-all">
+            <Link to={track.basePath} className="whitespace-nowrap inline-flex items-center gap-2 text-[#C9A84C] text-xs tracking-[0.15em] uppercase hover:underline cursor-pointer transition-all">
               <i className="ri-arrow-left-line text-sm"></i>
-              Study Guide
+              {track.short} Home
             </Link>
             <p className="text-[#C9A84C] text-sm italic shrink-0" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Lozano Collective</p>
           </div>
