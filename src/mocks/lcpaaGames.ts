@@ -95,7 +95,7 @@ export const lcpaaGameData: GameData = {
         { text: 'Report immediately to the Hotline, law enforcement and her parent or DFPS caseworker, then document your efforts to locate her.', outcome: 'Police open a search within minutes and a friend\'s address is checked. The foster mother is shaken but supported, and the report is complete and on time.', effects: { safety: 2, compliance: 2, morale: -1, budget: 0 }, best: true },
         { text: 'Have the caseworker text her friends and check social media for a few hours before involving anyone else.', outcome: 'The caseworker finds nothing useful, and the delay cuts into the time the girl is at risk. The late report is a deficiency.', effects: { safety: -2, compliance: -2, morale: 0, budget: 0 } },
       ],
-      lesson: 'A missing child 13 or older must be reported within 6 hours, but immediately when she has a trafficking history or may have been abducted. Reports go to the Hotline, law enforcement and the parent, and you document the efforts to find her.',
+      lesson: 'A missing child 13 or older must be reported within 6 hours, but immediately when she has a trafficking history or may have been abducted. Reports go to Child Care Regulation (made through the Hotline), law enforcement and the parent, and you document the efforts to find her.',
       cite: '§749.503',
     },
     {
@@ -121,7 +121,7 @@ export const lcpaaGameData: GameData = {
         { text: 'Schedule a discipline refresher and write up a note. If it happens again, you will report.', outcome: 'The unreported allegation turns up when the school calls the Hotline. The agency is cited for failing to report and protect the child.', effects: { safety: -3, compliance: -3, morale: 0, budget: 0 } },
         { text: 'Wait for the school or DFPS to investigate before taking any action of your own.', outcome: 'The boy remains in the home with no safety plan while others investigate, and the agency has missed its own reporting duty.', effects: { safety: -2, compliance: -2, morale: 0, budget: 1 } },
       ],
-      lesson: 'Corporal punishment of a child in care is prohibited, and an allegation of abuse is a serious incident reported as soon as you are aware of it, with the parent told right after the child is made safe. The CPA must also remove a child from abuse.',
+      lesson: 'Corporal punishment of a child in care is prohibited, and an allegation of abuse is a serious incident reported as soon as you are aware of it, with the parent told right after the child is made safe. The report to Child Care Regulation and the parent must say whether the CPA plans to move the child until the investigation is complete; law enforcement is not a required recipient under this rule. The CPA must also remove a child from abuse.',
       cite: '§749.1303',
     },
     {
