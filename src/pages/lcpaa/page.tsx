@@ -77,19 +77,19 @@ export default function LCPAAPage() {
           <div className="bg-[#0A0A0A]/4 border border-[#C9A84C]/20 rounded-3xl p-8 flex flex-col justify-between gap-6">
             <div className="flex items-start gap-5">
               <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-[#C9A84C]/15 border border-[#C9A84C]/20 shrink-0">
-                <i className="ri-book-open-line text-[#C9A84C] text-2xl"></i>
+                <i className="ri-flashlight-line text-[#C9A84C] text-2xl"></i>
               </div>
               <div>
-                <p className="text-[#C9A84C] text-[10px] tracking-[0.3em] uppercase mb-1">Learn the Rules</p>
-                <h3 className="text-[#0A0A0A] text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Study Guide</h3>
-                <p className="text-[#5C5752] text-sm mt-1">{domains.length} domains · study material, real-world scenarios and a quiz for each</p>
+                <p className="text-[#C9A84C] text-[10px] tracking-[0.3em] uppercase mb-1">Study Games</p>
+                <h3 className="text-[#0A0A0A] text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif' }}>4 Ways to Play</h3>
+                <p className="text-[#5C5752] text-sm mt-1">Admin Shift · Deadline Dash · Citation Court · Compliance Sprint</p>
               </div>
             </div>
             <Link
-              to={`${track.basePath}/study`}
+              to={`${track.basePath}/games`}
               className="whitespace-nowrap inline-flex items-center justify-center gap-3 bg-[#0A0A0A] text-[#F5F1E8] text-xs tracking-[0.2em] uppercase px-8 py-4 rounded-full hover:bg-[#C9A84C] hover:text-[#0A0A0A] transition-all duration-300 cursor-pointer font-semibold"
             >
-              Open the Study Guide
+              Open the Games
               <i className="ri-arrow-right-line"></i>
             </Link>
           </div>
@@ -115,19 +115,19 @@ export default function LCPAAPage() {
           <div className="bg-[#0A0A0A]/4 border border-[#C9A84C]/20 rounded-3xl p-8 flex flex-col justify-between gap-6">
             <div className="flex items-start gap-5">
               <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-[#C9A84C]/15 border border-[#C9A84C]/20 shrink-0">
-                <i className="ri-flashlight-line text-[#C9A84C] text-2xl"></i>
+                <i className="ri-book-open-line text-[#C9A84C] text-2xl"></i>
               </div>
               <div>
-                <p className="text-[#C9A84C] text-[10px] tracking-[0.3em] uppercase mb-1">Study Games</p>
-                <h3 className="text-[#0A0A0A] text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif' }}>4 Ways to Play</h3>
-                <p className="text-[#5C5752] text-sm mt-1">Admin Shift · Deadline Dash · Citation Court · Compliance Sprint</p>
+                <p className="text-[#C9A84C] text-[10px] tracking-[0.3em] uppercase mb-1">Learn the Rules</p>
+                <h3 className="text-[#0A0A0A] text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Study Guide</h3>
+                <p className="text-[#5C5752] text-sm mt-1">{domains.length} domains · study material, real-world scenarios and a quiz for each</p>
               </div>
             </div>
             <Link
-              to={`${track.basePath}/games`}
+              to={`${track.basePath}/study`}
               className="whitespace-nowrap inline-flex items-center justify-center gap-3 bg-[#0A0A0A] text-[#F5F1E8] text-xs tracking-[0.2em] uppercase px-8 py-4 rounded-full hover:bg-[#C9A84C] hover:text-[#0A0A0A] transition-all duration-300 cursor-pointer font-semibold"
             >
-              Open the Games
+              Open the Study Guide
               <i className="ri-arrow-right-line"></i>
             </Link>
           </div>
