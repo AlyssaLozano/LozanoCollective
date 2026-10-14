@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { lccaPracticeExams, PracticeExam } from '@/mocks/lccaExams';
+import LicensedAdminNote from './LicensedAdminNote';
 
 type AnswerMap = Record<string, number>;
 type RevealMap = Record<string, boolean>;
@@ -95,7 +96,8 @@ function ExamView({
       {/* Review Form — appears after submission */}
       {submitted && (
         <div className="bg-[#F5F1E8] border-b border-[#0A0A0A]/8 px-6 md:px-12 lg:px-20 py-10">
-          <div className="max-w-screen-xl mx-auto">
+          <div className="max-w-screen-xl mx-auto space-y-8">
+            <LicensedAdminNote />
             <div className="bg-white rounded-3xl border border-[#0A0A0A]/8 p-8 md:p-10">
               <div className="flex items-start gap-4 mb-6">
                 <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-[#C9A84C]/15 shrink-0">
@@ -146,14 +148,9 @@ function ExamView({
                     <label className="text-[#0A0A0A] text-xs font-medium block mb-2">Exam Taken</label>
                     <select name="exam_taken" className="w-full px-4 py-3 rounded-xl border border-[#0A0A0A]/10 bg-[#F5F1E8]/40 text-sm text-[#0A0A0A] focus:outline-none focus:border-[#C9A84C]/50">
                       <option value="">Select exam...</option>
-                      <option value="Exam 1 — Foundational">Exam 1 — Foundational</option>
-                      <option value="Exam 2 — Foundational">Exam 2 — Foundational</option>
-                      <option value="Exam 3 — Applied">Exam 3 — Applied</option>
-                      <option value="Exam 4 — Advanced">Exam 4 — Advanced</option>
-                      <option value="Exam 5 — Final Prep">Exam 5 — Final Prep</option>
-                      <option value="Exam 6 — Final Prep 1">Exam 6 — Final Prep 1</option>
-                      <option value="Exam 7 — Final Prep 2">Exam 7 — Final Prep 2</option>
-                      <option value="Exam 8 — Scenario Exam">Exam 8 — Scenario Exam</option>
+                      {lccaPracticeExams.map(e => (
+                        <option key={e.id} value={`Exam ${e.number} — ${e.title}`}>Exam {e.number} — {e.title}</option>
+                      ))}
                     </select>
                   </div>
                   <div>
@@ -318,6 +315,8 @@ export default function PracticeExamsPage() {
     return <ExamView exam={activeExam} onBack={() => setActiveExam(null)} />;
   }
 
+  const totalQuestions = lccaPracticeExams.reduce((a, e) => a + e.questions.length, 0);
+
   const difficultyLabel = (n: number) => {
     if (n <= 2) return 'Foundational';
     if (n === 3) return 'Applied';
@@ -325,7 +324,7 @@ export default function PracticeExamsPage() {
     if (n === 5) return 'Final Prep';
     if (n === 6 || n === 7) return 'Comprehensive Final';
     if (n === 8) return 'All Scenarios';
-    if (n === 9) return 'Ch. 748 Mastery';
+    if (n >= 9 && n <= 11) return 'Ch. 748 Mastery';
     return 'Practice';
   };
 
@@ -334,7 +333,7 @@ export default function PracticeExamsPage() {
     if (n === 3) return 'text-[#C9A84C] bg-[#C9A84C]/10';
     if (n === 4) return 'text-[#8B3A3A] bg-[#8B3A3A]/10';
     if (n === 5) return 'text-[#C9A84C] bg-[#C9A84C]/10';
-    if (n === 9) return 'text-[#4a7c59] bg-[#4a7c59]/10';
+    if (n >= 9 && n <= 11) return 'text-[#4a7c59] bg-[#4a7c59]/10';
     return 'text-[#0A0A0A] bg-[#0A0A0A]/10';
   };
 
@@ -364,12 +363,19 @@ export default function PracticeExamsPage() {
             </div>
             <div className="max-w-sm">
               <p className="text-[#8B8680] text-sm leading-relaxed mb-6">
-                11 full-length practice exams — 5 foundational (25 questions each), 2 comprehensive final prep exams (50 questions each), 1 all-scenario exam (50 questions), and 3 Chapter 748 Mastery Exams (50 questions each), 423 total. Each exam covers all domains. Answer all questions, then submit to see your score and detailed explanations.
+                {lccaPracticeExams.length} full-length practice exams, {totalQuestions} questions in all, updated for the September 2026 Minimum Standards (Chapters 748 and 749). Answer all questions, then submit to see your score and detailed explanations.
               </p>
+              <Link
+                to="/lcca/game"
+                className="whitespace-nowrap inline-flex items-center gap-2 text-[#C9A84C] text-xs tracking-[0.2em] uppercase mb-6 hover:underline cursor-pointer"
+              >
+                <i className="ri-gamepad-line text-sm"></i>
+                Or play the Compliance Sprint game
+              </Link>
               <div className="grid grid-cols-3 gap-4">
                 {[
-                  { value: '11', label: 'Exams' },
-                  { value: '423', label: 'Questions' },
+                  { value: `${lccaPracticeExams.length}`, label: 'Exams' },
+                  { value: `${totalQuestions}`, label: 'Questions' },
                   { value: '7', label: 'Domains' },
                 ].map(s => (
                   <div key={s.label} className="bg-white/5 rounded-2xl p-4 text-center">

@@ -6,6 +6,7 @@ import InnerEmpirePage from "../pages/ventures/InnerEmpire";
 import ImageCatalog from "../pages/ImageCatalog";
 import LCCAPage from "../pages/lcca/page";
 import PracticeExamsPage from "../pages/lcca/PracticeExams";
+import LCCAGamePage from "../pages/lcca/Game";
 
 const routes: RouteObject[] = [
   {
@@ -23,6 +24,10 @@ const routes: RouteObject[] = [
   {
     path: "/lcca/practice-exams",
     element: <PracticeExamsPage />,
+  },
+  {
+    path: "/lcca/game",
+    element: <LCCAGamePage />,
   },
   {
     path: "/ventures/inner-empire-consulting",

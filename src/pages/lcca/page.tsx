@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { lccaDomains } from '@/mocks/lccaContent';
+import { lccaPracticeExams } from '@/mocks/lccaExams';
+import LicensedAdminNote from './LicensedAdminNote';
 
 type AnswerMap = Record<string, number>;
 type RevealMap = Record<string, boolean>;
@@ -299,8 +301,8 @@ export default function LCCAPage() {
                 </div>
                 <div>
                   <p className="text-[#C9A84C] text-[10px] tracking-[0.3em] uppercase mb-1">Ready to Test Yourself?</p>
-                  <h3 className="text-[#0A0A0A] text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif' }}>5 Full-Length Practice Exams</h3>
-                  <p className="text-[#5C5752] text-sm mt-1">25 questions each · 125 total · All 7 domains · Scored with explanations</p>
+                  <h3 className="text-[#0A0A0A] text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{lccaPracticeExams.length} Full-Length Practice Exams</h3>
+                  <p className="text-[#5C5752] text-sm mt-1">{lccaPracticeExams.reduce((a, e) => a + e.questions.length, 0)} questions total · Updated for the September 2026 Minimum Standards · Scored with explanations</p>
                 </div>
               </div>
               <Link
@@ -310,6 +312,31 @@ export default function LCCAPage() {
                 Take a Practice Exam
                 <i className="ri-arrow-right-line"></i>
               </Link>
+            </div>
+
+            {/* Game CTA */}
+            <div className="mt-6 bg-[#0A0A0A] rounded-3xl p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex items-center gap-5">
+                <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-[#C9A84C]/15 border border-[#C9A84C]/30 shrink-0">
+                  <i className="ri-gamepad-line text-[#C9A84C] text-2xl"></i>
+                </div>
+                <div>
+                  <p className="text-[#C9A84C] text-[10px] tracking-[0.3em] uppercase mb-1">New · Study Game</p>
+                  <h3 className="text-[#F5F1E8] text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Compliance Sprint</h3>
+                  <p className="text-[#8B8680] text-sm mt-1">Beat the clock, build streaks, keep your lives — a fast way to drill the rules.</p>
+                </div>
+              </div>
+              <Link
+                to="/lcca/game"
+                className="whitespace-nowrap inline-flex items-center gap-3 bg-[#C9A84C] text-[#0A0A0A] text-xs tracking-[0.2em] uppercase px-8 py-4 rounded-full hover:bg-[#F5F1E8] transition-all duration-300 cursor-pointer font-semibold shrink-0"
+              >
+                Play the Game
+                <i className="ri-arrow-right-line"></i>
+              </Link>
+            </div>
+
+            <div className="mt-6">
+              <LicensedAdminNote />
             </div>
           </div>
         </div>
@@ -380,7 +407,7 @@ export default function LCCAPage() {
             <div className="bg-white rounded-2xl border border-[#0A0A0A]/6 p-6 md:p-8">
               <p className="text-[#5C5752] text-xs leading-[1.9]">
                 This study guide is an independent educational resource and is not affiliated with, endorsed by, or approved by the Texas Health and Human Services Commission (HHSC), Child Care Regulation (CCR), the University of Texas at Arlington (UTA), or any state or federal agency.<br /><br />
-                The content is based on the author's interpretation of 26 Texas Administrative Code Chapter 748 (Minimum Standards for General Residential Operations) as of the publication date. Rules, standards, and exam content are subject to change. The official and authoritative source is the current Minimum Standards published by HHSC at hhs.texas.gov.<br /><br />
+                The content is based on the author's interpretation of 26 Texas Administrative Code Chapter 748 (Minimum Standards for General Residential Operations) and Chapter 749 (Minimum Standards for Child-Placing Agencies), as revised September 2026. Rules, standards, and exam content are subject to change. The official and authoritative source is the current Minimum Standards published by HHSC at hhs.texas.gov.<br /><br />
                 Practice questions are designed to reinforce study of the Minimum Standards and do not reflect actual exam questions, exam format, or the exam question bank used by HHSC or UTA. No guarantee is made that studying this guide will result in passing the LCCA exam.<br /><br />
                 This guide does not constitute legal, regulatory, or professional advice. Users should consult HHSC Child Care Regulation, qualified legal counsel, or licensed professionals for guidance on specific compliance, licensure, or operational questions.<br /><br />
                 The author and publisher disclaim any liability for errors, omissions, or outcomes related to use of this material.
