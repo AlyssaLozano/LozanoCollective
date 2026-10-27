@@ -366,7 +366,7 @@ export default function PracticeExamsPage({ track = tracks.lcca }: { track?: Tra
             </div>
             <div className="max-w-sm">
               <p className="text-[#8B8680] text-sm leading-relaxed mb-6">
-                {track.exams.length} full-length practice exams, {totalQuestions} questions in all, {track.id === 'lcca' ? 'updated for the September 2026 Minimum Standards (Chapters 748 and 749)' : 'built from the Chapter 749 Minimum Standards for Child-Placing Agencies (revised August 2026)'}. Answer all questions, then submit to see your score and detailed explanations.
+                {track.exams.length} full-length practice exams, {totalQuestions} questions in all, {track.id === 'lcca' ? 'written from Chapter 748, the September 2026 Minimum Standards for General Residential Operations' : 'built from the Chapter 749 Minimum Standards for Child-Placing Agencies (revised August 2026)'}. Answer all questions, then submit to see your score and detailed explanations.
               </p>
               <Link
                 to={`${track.basePath}/games`}

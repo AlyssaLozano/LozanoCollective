@@ -237,7 +237,7 @@ export default function LCCAPage() {
                 )}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {[
-                    { value: '7', label: 'Core Domains' },
+                    { value: `${lccaDomains.length}`, label: 'Study Domains' },
                     { value: `${totalQuestions}`, label: 'Practice Questions' },
                     { value: 'Texas HHS', label: 'Governing Body' },
                     { value: 'Free', label: 'Cost' },
@@ -428,7 +428,7 @@ export default function LCCAPage() {
             <div className="bg-white rounded-2xl border border-[#0A0A0A]/6 p-6 md:p-8">
               <p className="text-[#5C5752] text-xs leading-[1.9]">
                 This study guide is an independent educational resource and is not affiliated with, endorsed by, or approved by the Texas Health and Human Services Commission (HHSC), Child Care Regulation (CCR), the University of Texas at Arlington (UTA), or any state or federal agency.<br /><br />
-                The content is based on the author's interpretation of 26 Texas Administrative Code Chapter 748 (Minimum Standards for General Residential Operations) and Chapter 749 (Minimum Standards for Child-Placing Agencies), as revised September 2026. Rules, standards, and exam content are subject to change. The official and authoritative source is the current Minimum Standards published by HHSC at hhs.texas.gov.<br /><br />
+                The content is based on the author's interpretation of 26 Texas Administrative Code Chapter 748 (Minimum Standards for General Residential Operations), as revised September 2026. Rules, standards, and exam content are subject to change. The official and authoritative source is the current Minimum Standards published by HHSC at hhs.texas.gov.<br /><br />
                 Practice questions are designed to reinforce study of the Minimum Standards and do not reflect actual exam questions, exam format, or the exam question bank used by HHSC or UTA. No guarantee is made that studying this guide will result in passing the LCCA exam.<br /><br />
                 This guide does not constitute legal, regulatory, or professional advice. Users should consult HHSC Child Care Regulation, qualified legal counsel, or licensed professionals for guidance on specific compliance, licensure, or operational questions.<br /><br />
                 The author and publisher disclaim any liability for errors, omissions, or outcomes related to use of this material.

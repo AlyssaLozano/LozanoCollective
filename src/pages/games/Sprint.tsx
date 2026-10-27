@@ -4,7 +4,7 @@ import LicensedAdminNote from '../lcca/LicensedAdminNote';
 import { shuffle, readBest, writeBest, bestKey, type GameQuestion, type Track } from '../tracks/config';
 
 type Phase = 'menu' | 'playing' | 'over';
-type Mode = 'all' | 'ch748' | 'scenario';
+type Mode = 'all' | 'numbers' | 'scenario';
 
 const START_LIVES = 3;
 const SECONDS_PER_QUESTION = 25;
@@ -59,7 +59,7 @@ export default function SprintGame({ track }: { track: Track }) {
 
   const poolFor = useCallback(
     (m: Mode) => {
-      if (m === 'ch748') return pool.filter(q => track.chapterRegex.test(`${q.domain} ${q.question} ${q.explanation}`));
+      if (m === 'numbers') return pool.filter(q => /\d/.test(q.options[q.correct] ?? ''));
       if (m === 'scenario') return pool.filter(isScenario);
       return pool;
     },
@@ -67,7 +67,7 @@ export default function SprintGame({ track }: { track: Track }) {
   );
 
   const counts = useMemo(
-    () => ({ all: poolFor('all').length, ch748: poolFor('ch748').length, scenario: poolFor('scenario').length }),
+    () => ({ all: poolFor('all').length, numbers: poolFor('numbers').length, scenario: poolFor('scenario').length }),
     [poolFor]
   );
 
@@ -180,7 +180,7 @@ export default function SprintGame({ track }: { track: Track }) {
   if (phase === 'menu') {
     const modes: { id: Mode; title: string; blurb: string; icon: string }[] = [
       { id: 'all', title: 'Full Mix', blurb: 'Questions from every domain and every practice exam.', icon: 'ri-shuffle-line' },
-      { id: 'ch748', title: `${track.chapterLabel} Blitz`, blurb: `${track.governs} rules, timelines and limits only.`, icon: 'ri-building-2-line' },
+      { id: 'numbers', title: 'Numbers & Deadlines', blurb: `Timeframes, ages, ratios and limits from ${track.chapterLabel} — the numbers you must know cold.`, icon: 'ri-timer-line' },
       { id: 'scenario', title: 'Scenario Showdown', blurb: 'Longer, real-world situations. You are the administrator.', icon: 'ri-discuss-line' },
     ];
     return (
